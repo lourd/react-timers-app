@@ -1,16 +1,16 @@
-var path = require('path');
-var autoprefixer = require('autoprefixer');
-var webpack = require('webpack');
-var HtmlWebpackPlugin = require('html-webpack-plugin');
-var ExtractTextPlugin = require('extract-text-webpack-plugin');
-var url = require('url');
-var paths = require('./paths');
+const path = require('path')
+const autoprefixer = require('autoprefixer')
+const webpack = require('webpack')
+const HtmlWebpackPlugin = require('html-webpack-plugin')
+const ExtractTextPlugin = require('extract-text-webpack-plugin')
+const url = require('url')
+const paths = require('./paths')
 
-var homepagePath = require(paths.appPackageJson).homepage;
-var publicPath = homepagePath ? url.parse(homepagePath).pathname : '/';
+const homepagePath = require(paths.appPackageJson).homepage
+let publicPath = homepagePath ? url.parse(homepagePath).pathname : '/'
 if (!publicPath.endsWith('/')) {
   // Prevents incorrect paths in file-loader
-  publicPath += '/';
+  publicPath += '/'
 }
 
 module.exports = {
@@ -87,7 +87,7 @@ module.exports = {
     useEslintrc: false
   },
   postcss: function() {
-    return [autoprefixer];
+    return [autoprefixer]
   },
   plugins: [
     new HtmlWebpackPlugin({
@@ -125,4 +125,4 @@ module.exports = {
     }),
     new ExtractTextPlugin('static/css/[name].[contenthash:8].css')
   ]
-};
+}

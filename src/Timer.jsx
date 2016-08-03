@@ -49,9 +49,10 @@ export default class Timer extends Component {
           {Math.round(millis/1000)}
           <small>{millis % 1000}</small>
         </h1>
-        {isPaused && <div>Timer paused</div>}
-        <button onClick={startTimer}>Start</button>
-        <button onClick={pauseTimer}>Pause</button>
+        {isPaused
+          ? <button onClick={startTimer}>Start</button>
+          : <button onClick={pauseTimer}>Pause</button>
+        }
       </div>
     )
   }
