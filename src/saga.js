@@ -1,4 +1,4 @@
-import { take, put, race, call, select, fork } from 'redux-saga/effects'
+import { take, put, call, select, fork, cancel } from 'redux-saga/effects'
 
 import {
   getMillis,
@@ -54,29 +54,32 @@ export function resetTimer(id) {
 
 const delay = ms => new Promise(resolve => setTimeout(resolve, ms))
 
-function* timerSaga(id) {
-  yield put(setPaused(id, false))
+function* updateTimer(id, interval) {
+  let ms = yield select(getMillis, id)
   while (true) {
     const start = Date.now()
-    const { pause } = yield race({
-      pause: take(PAUSE_TIMER),
-      increment: call(delay, 70), // Controls update frequency
-    })
-    if (pause && pause.id === id) {
-      yield put(setPaused(id, true))
-      break
-    } else {
-      const newDiff = Date.now() - start
-      const oldMillis = yield select(getMillis, id)
-      yield put(setMillis(id, oldMillis + newDiff))
-    }
+    yield call(delay, interval)
+    const delta = Date.now() - start
+    ms += delta
+    yield put(setMillis(id, ms))
   }
 }
 
-function* timersSaga() {
+function* startTimerSaga(id) {
+  yield put(setPaused(id, false))
+  const updating = yield fork(updateTimer, id, 70)
+  while (true) {
+    const { id: pausedId } = yield take(PAUSE_TIMER)
+    if (pausedId === id) break
+  }
+  yield cancel(updating)
+  yield put(setPaused(id, true))
+}
+
+function* runTimersSaga() {
   while (true) {
     const { id } = yield take(START_TIMER)
-    yield fork(timerSaga, id)
+    yield fork(startTimerSaga, id)
   }
 }
 
@@ -97,7 +100,7 @@ function* resetTimerSaga() {
 }
 
 export default function* saga() {
-  yield fork(timersSaga)
+  yield fork(runTimersSaga)
   yield fork(deleteTimerSaga)
   yield fork(resetTimerSaga)
 }
