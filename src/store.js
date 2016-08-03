@@ -6,12 +6,12 @@ import saga from './saga'
 
 const sagaMiddleware = createSagaMiddleware()
 
-const enhancedCreateStore = compose(
+const enhancer = compose(
   applyMiddleware(sagaMiddleware),
-  window.devToolsExtension ? window.devToolsExtension() : f => f,
-)(createStore)
+  window.devToolsExtension ? window.devToolsExtension() : x => x,
+)
 
-const store = enhancedCreateStore(reducer)
+const store = createStore(reducer, undefined, enhancer)
 
 sagaMiddleware.run(saga)
 

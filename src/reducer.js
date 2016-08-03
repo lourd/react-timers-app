@@ -87,7 +87,7 @@ function timers(state = initialTimers, action) {
     case DELETE_TIMER:
       // Filter off the old key
       /* eslint-ignore no-unused-vars */
-      const { [action.id]:_, ...newState } = state
+      const { [action.id]: _, ...newState } = state
       return newState
     default:
       return state

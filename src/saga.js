@@ -14,6 +14,7 @@ import {
 const START_TIMER = 'START_TIMER'
 const PAUSE_TIMER = 'PAUSE_TIMER'
 const REMOVE_TIMER = 'REMOVE_TIMER'
+const RESET_TIMER = 'RESET_TIMER'
 
 /**
  * Action creators
@@ -40,6 +41,13 @@ export function removeTimer(id) {
   }
 }
 
+export function resetTimer(id) {
+  return {
+    type: RESET_TIMER,
+    id,
+  }
+}
+
 /**
  * Sagas
  */
@@ -52,7 +60,7 @@ function* timerSaga(id) {
     const start = Date.now()
     const { pause } = yield race({
       pause: take(PAUSE_TIMER),
-      increment: call(delay, 50), // Controls update frequency
+      increment: call(delay, 70), // Controls update frequency
     })
     if (pause && pause.id === id) {
       yield put(setPaused(id, true))
@@ -80,7 +88,16 @@ function* deleteTimerSaga() {
   }
 }
 
+function* resetTimerSaga() {
+  while (true) {
+    const { id } = yield take(RESET_TIMER)
+    yield put(pauseTimer(id))
+    yield put(setMillis(id, 0))
+  }
+}
+
 export default function* saga() {
   yield fork(timersSaga)
   yield fork(deleteTimerSaga)
+  yield fork(resetTimerSaga)
 }
