@@ -67,7 +67,7 @@ function* updateTimer(id, interval) {
 
 function* startTimerSaga(id) {
   yield put(setPaused(id, false))
-  const updating = yield fork(updateTimer, id, 70)
+  const updating = yield fork(updateTimer, id, 100)
   while (true) {
     const { id: pausedId } = yield take(PAUSE_TIMER)
     if (pausedId === id) break

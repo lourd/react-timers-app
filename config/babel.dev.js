@@ -15,7 +15,7 @@ module.exports = {
   ].map(require.resolve).concat([
     [require.resolve('babel-plugin-transform-runtime'), {
       helpers: false,
-      polyfill: false,
+      polyfill: true,
       regenerator: true,
     }]
   ])

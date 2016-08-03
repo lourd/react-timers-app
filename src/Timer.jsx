@@ -62,9 +62,7 @@ export default class Timer extends Component {
       remove,
       reset,
     } = this.props
-    let ms = (millis % 1000)
-    ms = '' + ms
-    ms = ('000' + ms).substring(ms.length)
+    const ms = String(millis % 1000).padStart(3, '0').slice(0, 3)
     return (
       <div style={styles.container}>
         <h1>
