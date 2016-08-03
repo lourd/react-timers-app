@@ -4,27 +4,35 @@ import { connect } from 'react-redux'
 import { getMillis, getPaused } from './reducer'
 import { startTimer, pauseTimer } from './saga'
 
-function mapStateToProps(state) {
+const styles = {
+  container: {
+    border: '1px dashed #222',
+    display: 'inline-block',
+    width: 150,
+    textAlign: 'center',
+  },
+  small: {
+    marginLeft: 3,
+    fontSize: 14,
+  },
+}
+
+function mapStateToProps(state, { id }) {
   return {
-    millis: getMillis(state),
-    isPaused: getPaused(state),
+    millis: getMillis(state, id),
+    isPaused: getPaused(state, id),
   }
 }
 
-// function mapDispatchToProps(dispatch) {
-//   return {
-//     startTimer() {
-//       dispatch(startTimer())
-//     },
-//     pauseTimer() {
-//       dispatch(pauseTimer())
-//     },
-//   }
-// }
-
-const mapDispatchToProps = {
-  startTimer,
-  pauseTimer,
+function mapDispatchToProps(dispatch, { id }) {
+  return {
+    startTimer() {
+      dispatch(startTimer(id))
+    },
+    pauseTimer() {
+      dispatch(pauseTimer(id))
+    },
+  }
 }
 
 @connect(mapStateToProps, mapDispatchToProps)
@@ -34,6 +42,7 @@ export default class Timer extends Component {
     pauseTimer: PropTypes.func.isRequired,
     millis: PropTypes.number.isRequired,
     isPaused: PropTypes.bool.isRequired,
+    id: PropTypes.number.isRequired,
   }
 
   render() {
@@ -44,10 +53,10 @@ export default class Timer extends Component {
       isPaused,
     } = this.props
     return (
-      <div>
+      <div style={styles.container}>
         <h1>
-          {Math.round(millis/1000)}
-          <small>{millis % 1000}</small>
+          {Math.floor(millis/1000)}
+          <small style={styles.small}>{millis % 1000}</small>
         </h1>
         {isPaused
           ? <button onClick={startTimer}>Start</button>

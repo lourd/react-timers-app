@@ -2,12 +2,12 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import { Provider } from 'react-redux'
 
-import Timer from './Timer'
+import TimerList from './TimerList'
 import store from './store'
 
 ReactDOM.render(
   <Provider store={store}>
-    <Timer />
+    <TimerList />
   </Provider>,
   document.getElementById('root')
 )
