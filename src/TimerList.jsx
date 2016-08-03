@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
+import map from 'lodash.map'
 
 import Timer from './Timer'
 import { getTimers, addTimer } from './reducer'
@@ -25,10 +26,10 @@ export default class TimerList extends Component {
     const { timers, addTimer } = this.props
     return (
       <div>
-        {timers.map((timer, i) =>
+        {map(timers, (timer, id) =>
           <Timer
-            id={i}
-            key={`timer_${i}`}
+            id={id}
+            key={`timer_${id}`}
           />
         )}
 

@@ -1,12 +1,13 @@
+import rs from 'random-string'
+
 /**
  * Action types
  */
 
 const SET_PAUSED = 'SET_PAUSED'
 const SET_MILLIS = 'SET_MILLIS'
-const INIT = '@@INIT'
 const ADD_TIMER = 'ADD_TIMER'
-const REMOVE_TIMER = 'REMOVE_TIMER'
+const DELETE_TIMER = 'DELETE_TIMER'
 
 /**
  * Action creators
@@ -34,9 +35,9 @@ export function addTimer() {
   }
 }
 
-export function removeTimer(id) {
+export function deleteTimer(id) {
   return {
-    type: REMOVE_TIMER,
+    type: DELETE_TIMER,
     id,
   }
 }
@@ -65,17 +66,29 @@ function timer(state = {
   }
 }
 
-function timers(state = [], action) {
+const initialTimers = {
+  [rs()]: timer(undefined, {})
+}
+
+function timers(state = initialTimers, action) {
   switch(action.type) {
-    case INIT:
     case ADD_TIMER:
-      return [...state, timer(undefined, action)]
+      return {
+        ...state,
+        [rs()]: timer(undefined, action)
+      }
     case SET_PAUSED:
     case SET_MILLIS:
-      return state.map((timerState, i) => {
-        if (i !== action.id) return timerState
-        else return timer(timerState, action)
-      })
+      const timerState = state[action.id]
+      return {
+        ...state,
+        [action.id]: timer(timerState, action)
+      }
+    case DELETE_TIMER:
+      // Filter off the old key
+      /* eslint-ignore no-unused-vars */
+      const { [action.id]:_, ...newState } = state
+      return newState
     default:
       return state
   }
@@ -91,18 +104,18 @@ export default function reducer(state = {}, action) {
  * Selectors
  */
 
-export function getMillis(state, i) {
-  const t = getTimer(state, i)
+export function getMillis(state, id) {
+  const t = getTimer(state, id)
   return t && t.millis
 }
 
-export function getPaused(state, i) {
-  const t = getTimer(state, i)
+export function getPaused(state, id) {
+  const t = getTimer(state, id)
   return t && t.paused
 }
 
-export function getTimer(state, i) {
-  return getTimers(state)[i]
+export function getTimer(state, id) {
+  return getTimers(state)[id]
 }
 
 export function getTimers(state) {

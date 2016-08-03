@@ -2,7 +2,7 @@ import React, { PropTypes, Component } from 'react'
 import { connect } from 'react-redux'
 
 import { getMillis, getPaused } from './reducer'
-import { startTimer, pauseTimer } from './saga'
+import { startTimer, pauseTimer, removeTimer } from './saga'
 
 const styles = {
   container: {
@@ -32,6 +32,9 @@ function mapDispatchToProps(dispatch, { id }) {
     pauseTimer() {
       dispatch(pauseTimer(id))
     },
+    remove() {
+      dispatch(removeTimer(id))
+    },
   }
 }
 
@@ -43,6 +46,7 @@ export default class Timer extends Component {
     millis: PropTypes.number.isRequired,
     isPaused: PropTypes.bool.isRequired,
     id: PropTypes.number.isRequired,
+    remove: PropTypes.func.isRequired,
   }
 
   render() {
@@ -51,6 +55,7 @@ export default class Timer extends Component {
       startTimer,
       pauseTimer,
       isPaused,
+      remove,
     } = this.props
     return (
       <div style={styles.container}>
@@ -62,6 +67,7 @@ export default class Timer extends Component {
           ? <button onClick={startTimer}>Start</button>
           : <button onClick={pauseTimer}>Pause</button>
         }
+        <button onClick={remove}>Remove</button>
       </div>
     )
   }
