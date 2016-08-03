@@ -64,7 +64,7 @@ export default class Timer extends Component {
     } = this.props
     let ms = (millis % 1000)
     ms = '' + ms
-    ms = ('00' + ms).substring(ms.length)
+    ms = ('000' + ms).substring(ms.length)
     return (
       <div style={styles.container}>
         <h1>
