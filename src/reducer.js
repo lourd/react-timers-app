@@ -81,6 +81,7 @@ function timers(state = initialTimers, action) {
     case SET_PAUSED:
     case SET_MILLIS:
       const timerState = state[action.id]
+      if (!timerState) return state
       return {
         ...state,
         [action.id]: timer(timerState, action)
