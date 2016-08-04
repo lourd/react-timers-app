@@ -32,6 +32,7 @@ export function setMillis(id, millis) {
 export function addTimer() {
   return {
     type: ADD_TIMER,
+    id: rs(),
   }
 }
 
@@ -75,7 +76,7 @@ function timers(state = initialTimers, action) {
     case ADD_TIMER:
       return {
         ...state,
-        [rs()]: timer(undefined, action)
+        [action.id]: timer(undefined, action)
       }
     case SET_PAUSED:
     case SET_MILLIS:
