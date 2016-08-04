@@ -5,6 +5,29 @@ import map from 'lodash.map'
 import Timer from './Timer'
 import { getTimers, addTimer } from './reducer'
 
+const styles = {
+  container: {
+    display: 'flex',
+    justifyContent: 'flex-start',
+    flexWrap: 'wrap',
+  },
+  addBtn: {
+    width: 150,
+    height: 150,
+    backgroundColor: 'transparent',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    border: '1px solid #ddd',
+    margin: 5,
+    borderRadius: 3,
+    fontFamily: 'Helvetica Neue',
+    fontSize: 66,
+    cursor: 'pointer',
+    padding: 0,
+  }
+}
+
 function mapStateToProps(state) {
   return {
     timers: getTimers(state),
@@ -25,7 +48,7 @@ export default class TimerList extends Component {
   render() {
     const { timers, addTimer } = this.props
     return (
-      <div>
+      <div style={styles.container}>
         {map(timers, (timer, id) =>
           <Timer
             id={id}
@@ -33,8 +56,8 @@ export default class TimerList extends Component {
           />
         )}
 
-        <button onClick={addTimer}>
-          Add another timer
+        <button onClick={addTimer} style={styles.addBtn}>
+          +
         </button>
       </div>
     )

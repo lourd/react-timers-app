@@ -6,10 +6,30 @@ import { startTimer, pauseTimer, removeTimer, resetTimer } from './saga'
 
 const styles = {
   container: {
-    border: '1px dashed #222',
-    display: 'inline-block',
+    border: '1px solid #ddd',
     width: 150,
-    textAlign: 'center',
+    height: 150,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    position: 'relative',
+    fontFamily: '"Helvetica Neue", "Helvetica"',
+    borderRadius: 3,
+    boxShadow: '1px 1px 14px rgba(0,0,0,0.2)',
+    margin: 5,
+  },
+  btns: {
+    position: 'absolute',
+    bottom: 3,
+    width: '100%',
+    display: 'flex',
+    justifyContent: 'space-around',
+  },
+  btn: {
+    backgroundColor: 'transparent',
+    border: 'none',
+    fontSize: 16,
+    cursor: 'pointer',
   },
   small: {
     marginLeft: 3,
@@ -69,12 +89,28 @@ export default class Timer extends Component {
           {Math.floor(millis/1000)}
           <small style={styles.small}>{ms}</small>
         </h1>
-        {isPaused
-          ? <button onClick={startTimer}>Start</button>
-          : <button onClick={pauseTimer}>Pause</button>
-        }
-        <button onClick={reset}>Reset</button>
-        <button onClick={remove}>Remove</button>
+        <div style={styles.btns}>
+          {isPaused
+            ? <button
+                onClick={startTimer}
+                style={styles.btn}
+              >
+                ▶️
+              </button>
+            : <button
+                onClick={pauseTimer}
+                style={styles.btn}
+              >
+                ⏸
+              </button>
+          }
+          <button onClick={reset} style={styles.btn}>
+            🔄
+          </button>
+          <button onClick={remove} style={styles.btn}>
+            🗑
+          </button>
+        </div>
       </div>
     )
   }
