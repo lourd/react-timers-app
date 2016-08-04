@@ -29,7 +29,7 @@ export function startTimer(id) {
 
 export function pauseTimer(id) {
   return {
-    type: PAUSE_TIMER,
+    type: PAUSE_TIMER + id,
     id,
   }
 }
@@ -68,10 +68,11 @@ function* updateTimer(id, interval) {
 function* startTimerSaga(id) {
   yield put(setPaused(id, false))
   const updating = yield fork(updateTimer, id, 100)
-  while (true) {
-    const { id: pausedId } = yield take(PAUSE_TIMER)
-    if (pausedId === id) break
-  }
+  // while (true) {
+  //   const { id: pausedId } = yield take(PAUSE_TIMER)
+  //   if (pausedId === id) break
+  // }
+  yield take(PAUSE_TIMER + id)
   yield cancel(updating)
   yield put(setPaused(id, true))
 }
